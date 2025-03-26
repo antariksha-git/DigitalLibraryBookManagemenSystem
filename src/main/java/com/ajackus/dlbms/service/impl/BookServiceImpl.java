@@ -3,6 +3,9 @@ package com.ajackus.dlbms.service.impl;
 import com.ajackus.dlbms.dto.BookRequestDto;
 import com.ajackus.dlbms.dto.BookResponseDto;
 import com.ajackus.dlbms.entity.Status;
+import com.ajackus.dlbms.excpetion.BookAlreadyExistException;
+import com.ajackus.dlbms.excpetion.BookNotFoundException;
+import com.ajackus.dlbms.excpetion.FieldValidationException;
 import com.ajackus.dlbms.mapper.BookMapper;
 import com.ajackus.dlbms.model.Book;
 import com.ajackus.dlbms.repository.BookRepository;
@@ -23,6 +26,13 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookResponseDto createBook(BookRequestDto bookRequestDto) {
+        Book existedBookByBookIdOrTitle = bookRepository.findByBookIdOrTitle(bookRequestDto.getBookId(), bookRequestDto.getTitle())
+                .orElse(null);
+
+        if(!CommonUtils.isNullOrEmpty(existedBookByBookIdOrTitle)) {
+            throw new BookAlreadyExistException("Book already exist with id: " + bookRequestDto.getBookId() + " or title: " + bookRequestDto.getTitle());
+        }
+
         Book book = bookMapper.toEntity(bookRequestDto);
         book.setUuid(UUID.randomUUID().toString().substring(0, 8));
 
@@ -32,11 +42,11 @@ public class BookServiceImpl implements BookService {
     @Override
     public BookResponseDto updateBookByBookId(String bookId, BookRequestDto bookRequestDto) {
         if(CommonUtils.isNullOrEmpty(bookId)) {
-            throw new RuntimeException();
+            throw new FieldValidationException("Book id is required");
         }
 
         Book book = bookRepository.findByBookId(bookId)
-                .orElseThrow(() -> new RuntimeException("Book not found with id: " + bookId));
+                .orElseThrow(() -> new BookNotFoundException("Book not found with id: " + bookId));
 
         if(!CommonUtils.isNullOrEmpty(bookRequestDto.getTitle())) {
             book.setTitle(bookRequestDto.getTitle());
@@ -61,7 +71,7 @@ public class BookServiceImpl implements BookService {
         }
 
         Book book = bookRepository.findByBookId(bookId)
-                .orElseThrow(() -> new RuntimeException("Book not found with id: " + bookId));
+                .orElseThrow(() -> new BookNotFoundException("Book not found with id: " + bookId));
 
         bookRepository.delete(book);
         return bookMapper.toDto(book);
@@ -74,7 +84,7 @@ public class BookServiceImpl implements BookService {
         }
 
         Book book = bookRepository.findByBookIdOrTitle(bookIdOrTitle, bookIdOrTitle)
-                .orElseThrow(() -> new RuntimeException("Book not found with id or title: " + bookIdOrTitle));
+                .orElseThrow(() -> new BookNotFoundException("Book not found with id or title: " + bookIdOrTitle));
 
         return bookMapper.toDto(book);
     }
