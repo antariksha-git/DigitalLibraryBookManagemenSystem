@@ -3,6 +3,7 @@ package com.ajackus.dlbms.controller;
 import com.ajackus.dlbms.dto.BookRequestDto;
 import com.ajackus.dlbms.dto.BookResponseDto;
 import com.ajackus.dlbms.service.BookService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,7 +25,7 @@ public class BookController {
     private BookService bookService;
 
     @PostMapping
-    public ResponseEntity<BookResponseDto> createBook(@RequestBody BookRequestDto bookRequestDto) {
+    public ResponseEntity<BookResponseDto> createBook(@RequestBody @Valid BookRequestDto bookRequestDto) {
         BookResponseDto bookResponseDto = bookService.createBook(bookRequestDto);
         return ResponseEntity.ok(bookResponseDto);
     }
