@@ -1,4 +1,4 @@
-package com.ajackus.dlbms.entity;
+package com.ajackus.dlbms.enums;
 
 public enum Status {
     AVAILABLE,

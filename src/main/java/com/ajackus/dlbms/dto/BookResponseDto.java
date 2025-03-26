@@ -1,6 +1,6 @@
 package com.ajackus.dlbms.dto;
 
-import com.ajackus.dlbms.entity.Status;
+import com.ajackus.dlbms.enums.Status;
 import lombok.Data;
 
 @Data
