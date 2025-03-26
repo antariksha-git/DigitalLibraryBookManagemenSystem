@@ -1,6 +1,6 @@
 package com.ajackus.dlbms.model;
 
-import com.ajackus.dlbms.entity.Status;
+import com.ajackus.dlbms.enums.Status;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

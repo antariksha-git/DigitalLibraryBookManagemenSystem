@@ -2,7 +2,7 @@ package com.ajackus.dlbms.service.impl;
 
 import com.ajackus.dlbms.dto.BookRequestDto;
 import com.ajackus.dlbms.dto.BookResponseDto;
-import com.ajackus.dlbms.entity.Status;
+import com.ajackus.dlbms.enums.Status;
 import com.ajackus.dlbms.excpetion.BookAlreadyExistException;
 import com.ajackus.dlbms.excpetion.BookNotFoundException;
 import com.ajackus.dlbms.excpetion.FieldValidationException;
